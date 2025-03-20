@@ -25,6 +25,11 @@ module OpenProject
             ::OpenIDConnect::JwtParser.new(required_claims: ["sub"]).parse(@access_token).either(
               ->(payload_and_provider) do
                 payload, provider = payload_and_provider
+                unless valid_scope?(payload)
+                  return fail_with_header! error: "insufficient_scope",
+                                           error_description: "Requires scope #{scope} to access this resource."
+                end
+
                 user = User.find_by(identity_url: "#{provider.slug}:#{payload['sub']}")
                 if user
                   success!(user)
@@ -34,6 +39,13 @@ module OpenProject
               end,
               ->(error) { fail_with_header!(error: "invalid_token", error_description: error) }
             )
+          end
+
+          private
+
+          def valid_scope?(payload)
+            scopes = (payload["scope"] || "").split
+            scopes.include?(scope.to_s)
           end
         end
       end
