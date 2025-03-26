@@ -50,8 +50,8 @@ class Meeting < ApplicationRecord
            class_name: "MeetingParticipant",
            after_add: :send_participant_added_mail
 
-  has_many :sections, dependent: :destroy, class_name: "MeetingSection"
-  has_one :backlog, -> { where(backlog: true) }, class_name: "MeetingSection"
+  has_many :sections, -> { where(backlog: false) }, dependent: :destroy, class_name: "MeetingSection"
+  has_one :backlog, -> { where(backlog: true) }, dependent: :destroy, class_name: "MeetingSection"
   has_many :agenda_items, dependent: :destroy, class_name: "MeetingAgendaItem"
 
   scope :templated, -> { where(template: true) }
