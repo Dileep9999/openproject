@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -34,7 +36,8 @@ module CustomFields::Inputs::Base::Utils
       value:,
       required: required?,
       invalid: invalid?,
-      validation_message:
+      validation_message:,
+      caption:
     }
   end
 
@@ -52,6 +55,14 @@ module CustomFields::Inputs::Base::Utils
 
   def required?
     @custom_field.is_required?
+  end
+
+  def caption
+    raw_help_text = AttributeHelpText
+      .visible(User.current)
+      .find_by(attribute_name: @custom_field.attribute_name)
+      &.help_text
+    ::API::Decorators::Formattable.new(raw_help_text).to_html
   end
 
   def qa_field_name
