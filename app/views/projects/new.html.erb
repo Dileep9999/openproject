@@ -33,4 +33,10 @@ See COPYRIGHT and LICENSE files for more details.
     header.with_breadcrumbs([{ href: home_path, text: organization_name }, t(:label_project_new)])
   end
 %>
-<%= angular_component_tag "opce-new-project" %>
+<%=
+  primer_form_with(model: @project) do |f|
+    concat render(Projects::Form.new(f))
+    concat render(Projects::CustomFields::Form.new(f, project: @project, wrapper_id: "FOO"))
+  end
+%>
+<%# angular_component_tag "opce-new-project" %>

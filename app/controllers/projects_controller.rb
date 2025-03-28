@@ -89,6 +89,11 @@ class ProjectsController < ApplicationController
   end
 
   def new
+    @project = if params[:parent_id]
+      Project.find(params[:parent_id]).children.build
+    else
+      Project.new
+    end
     render layout: "no_menu"
   end
 
