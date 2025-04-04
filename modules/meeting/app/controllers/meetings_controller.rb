@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -67,18 +68,14 @@ class MeetingsController < ApplicationController
     :meetings
   end
 
-  def show # rubocop:disable Metrics/AbcSize
+  def show
     respond_to do |format|
       format.html do
         html_title "#{t(:label_meeting)}: #{@meeting.title}"
-        if @meeting.is_a?(StructuredMeeting)
-          if @meeting.state == "cancelled"
-            render_404
-          else
-            render(Meetings::ShowComponent.new(meeting: @meeting), layout: true)
-          end
-        elsif @meeting.agenda.present? && @meeting.agenda.locked?
-          params[:tab] ||= "minutes"
+        if @meeting.state == "cancelled"
+          render_404
+        else
+          render(Meetings::ShowComponent.new(meeting: @meeting), layout: true)
         end
       end
     end
@@ -337,7 +334,7 @@ class MeetingsController < ApplicationController
       @text = friendly_timezone_name(User.current.time_zone, period: meeting.start_time)
     end
 
-    prefix = params[:structured_meeting] ? "structured_" : ""
+    prefix = params[:meeting] ? "structured_" : ""
 
     add_caption_to_input_element_via_turbo_stream("input[name='#{prefix}meeting[start_time_hour]']",
                                                   caption: @text,
@@ -420,7 +417,12 @@ class MeetingsController < ApplicationController
   end
 
   def build_meeting
-    meeting = meeting_class.new
+    meeting =
+      if params[:type] == "recurring"
+        RecurringMeeting.new
+      else
+        Meeting.new
+      end
 
     service = meeting.is_a?(RecurringMeeting) ? ::RecurringMeetings::SetAttributesService : ::Meetings::SetAttributesService
     call = service
@@ -428,17 +430,6 @@ class MeetingsController < ApplicationController
       .call(project: @project)
 
     @meeting = call.result
-  end
-
-  def meeting_class
-    case params[:type]
-    when "recurring"
-      RecurringMeeting
-    when "structured"
-      StructuredMeeting
-    else
-      Meeting
-    end
   end
 
   def global_upcoming_meetings
@@ -449,7 +440,7 @@ class MeetingsController < ApplicationController
 
   def find_meeting
     @meeting = Meeting
-      .includes([:project, :author, { participants: :user }, :agenda, :minutes])
+      .includes([:project, :author, { participants: :user }, :sections, { agenda_items: :outcomes }])
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render_404
@@ -481,15 +472,15 @@ class MeetingsController < ApplicationController
       params
         .require(:meeting)
         .permit(:title, :location, :start_time, :project_id,
-                :duration, :start_date, :start_time_hour, :type,
+                :duration, :start_date, :start_time_hour,
                 participants_attributes: %i[email name invited attended user user_id meeting id])
     end
   end
 
   def structured_meeting_params
-    if params[:structured_meeting].present?
+    if params[:meeting].present?
       params
-        .require(:structured_meeting)
+        .require(:meeting)
         .permit(:title, :location, :start_time_hour, :duration, :start_date, :state, :lock_version)
     end
   end
@@ -559,12 +550,6 @@ class MeetingsController < ApplicationController
   end
 
   def timezone_params
-    meeting_params = if params[:meeting]
-                       params.require(:meeting)
-                     else
-                       params.require(:structured_meeting)
-                     end
-
-    @timezone_params ||= meeting_params.permit(:start_date, :start_time_hour).compact_blank
+    @timezone_params ||= params.require(:meeting).permit(:start_date, :start_time_hour).compact_blank
   end
 end

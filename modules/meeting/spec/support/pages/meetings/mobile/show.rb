@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -27,20 +28,22 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-module MeetingContents
-  class UpdateService < ::BaseServices::Update
-    include Attachments::ReplaceAttachments
+require_relative "../show"
 
-    def persist(call)
-      content = call.result
-
-      if content.lock_version_changed?
-        call.errors.add(:base, I18n.t(:notice_locking_conflict))
-        call.success = false
-        return call
+module Pages::Meetings::Mobile
+  class Show < ::Pages::Meetings::Show
+    def expect_participants(count: 1)
+      within(meeting_details_container) do
+        expect(page).to have_text(Meeting.human_attribute_name(:participant, count:))
+        expect(page).to have_link("Show all")
       end
+    end
 
-      super
+    def open_participant_form
+      within(meeting_details_container) do
+        click_link_or_button "Show all"
+      end
+      expect(page).to have_modal("Participants")
     end
   end
 end

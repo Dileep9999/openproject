@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -87,7 +88,7 @@ module MeetingsHelper
   end
 
   def copy_structured_meeting_participants?
-    @copy_from.is_a?(StructuredMeeting) && params[:meeting][:copy_participants] == "1"
+    params[:meeting][:copy_participants] == "1"
   end
 
   def create_participants

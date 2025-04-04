@@ -30,8 +30,7 @@
 
 require "spec_helper"
 
-require_relative "../../support/pages/meetings/new"
-require_relative "../../support/pages/structured_meeting/show"
+require_relative "../../support/pages/meetings/show"
 require_relative "../../support/pages/meetings/index"
 
 RSpec.describe "Structured meetings global CRUD", :js do
@@ -62,9 +61,8 @@ RSpec.describe "Structured meetings global CRUD", :js do
   end
 
   let(:current_user) { user }
-  let(:new_page) { Pages::Meetings::New.new(project) }
-  let(:meeting) { StructuredMeeting.last }
-  let(:show_page) { Pages::StructuredMeeting::Show.new(meeting) }
+  let(:meeting) { Meeting.last }
+  let(:show_page) { Pages::Meetings::Show.new(meeting) }
   let(:meetings_page) { Pages::Meetings::Index.new(project: nil) }
 
   before do

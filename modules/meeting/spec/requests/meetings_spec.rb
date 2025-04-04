@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -34,7 +35,7 @@ RSpec.describe "Meeting requests",
                type: :rails_request do
   shared_let(:project) { create(:project, enabled_module_names: %i[meetings]) }
   shared_let(:user) { create(:user, member_with_permissions: { project => %i[view_meetings create_meetings edit_meetings] }) }
-  shared_let(:meeting) { create(:structured_meeting, project:, author: user) }
+  shared_let(:meeting) { create(:meeting, project:, author: user) }
 
   before do
     meeting.participants.delete_all
@@ -107,7 +108,7 @@ RSpec.describe "Meeting requests",
         project_id: project.id,
         meeting: {
           title: "Copied meeting",
-          type: "StructuredMeeting"
+          type: "Meeting"
         }
       }
     end

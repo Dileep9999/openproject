@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,8 +30,7 @@
 
 require "spec_helper"
 
-require_relative "../../support/pages/meetings/new"
-require_relative "../../support/pages/structured_meeting/show"
+require_relative "../../support/pages/meetings/show"
 
 RSpec.describe "Structured meetings CRUD",
                :js,
@@ -41,9 +41,8 @@ RSpec.describe "Structured meetings CRUD",
   shared_let(:user) { create(:admin) }
 
   current_user { user }
-  let(:new_page) { Pages::Meetings::New.new(project) }
-  let(:meeting) { create(:structured_meeting, project:, author: current_user) }
-  let(:show_page) { Pages::StructuredMeeting::Show.new(meeting) }
+  let(:meeting) { create(:meeting, project:, author: current_user) }
+  let(:show_page) { Pages::Meetings::Show.new(meeting) }
 
   describe "meeting update flash" do
     before do
