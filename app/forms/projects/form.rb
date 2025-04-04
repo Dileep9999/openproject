@@ -32,20 +32,34 @@ module Projects
     include ::CustomFields::CustomFieldRendering
 
     form do |f|
+
+      f.html_content do
+        # "<h4>test</h4>".html_safe
+      end
+
       f.group(layout: :horizontal) do |template_group|
-        # template_group.project_autocompleter(
-        #  scope_name_to_model: false,
-        #  name: "template",
-        #  value: "foo",
-        #  label: "Template",
-        #  autocomplete_options: {
-        #    dropdownPosition: "bottom",
-        #    filters: [
-        #      { name: "user_action", operator: "=", values: ["projects/copy"] },
-        #      { name: "templated", operator: "=", value: true }
-        #    ]
-        #  }
-        # )
+       # template_group.text_field name: :template, label: "template", value: "foo"
+
+        template_group.project_autocompleter(
+         scope_name_to_model: false,
+         name: "template",
+         value: "foo",
+         label: "Template",
+         autocomplete_options: {
+           dropdownPosition: "bottom",
+           decorated: true,
+           inputName: "FOOBAR",
+           #inputValue: "FOOBAR2_value",
+           labelForId: "FOOBAR2",
+           filters: [
+             { name: "user_action", operator: "=", values: ["projects/copy"] },
+             { name: "templated", operator: "=", values: ["t"] }
+           ],
+           data: {
+            "projects-form-target": "templateSelect"
+           }
+         }
+        )
       end
 
       f.text_field name: :name, label: attribute_name(:name), required: true
@@ -55,7 +69,7 @@ module Projects
         label: attribute_name(:parent_id),
         autocomplete_options: {
           dropdownPosition: "bottom",
-          filters: [{ name: "user_action", operator: "=", values: ["meetings/create"] }]
+          # filters: [{ name: "user_action", operator: "=", values: ["meetings/create"] }]
         }
       )
     end
