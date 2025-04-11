@@ -64,14 +64,14 @@ Redmine::MenuManager.map :top_menu do |menu|
                 User.current.allowed_in_any_project?(:view_news)
             }
 
-  menu.push :help,
-            OpenProject::Static::Links.help_link,
-            last: true,
-            caption: "",
-            icon: "question",
-            html: { accesskey: OpenProject::AccessKeys.key_for(:help),
-                    title: I18n.t("label_help"),
-                    target: "_blank" }
+  # menu.push :help,
+  #           OpenProject::Static::Links.help_link,
+  #           last: true,
+  #           caption: "",
+  #           icon: "question",
+  #           html: { accesskey: OpenProject::AccessKeys.key_for(:help),
+  #                   title: I18n.t("label_help"),
+  #                   target: "_blank" }
 end
 
 Redmine::MenuManager.map :quick_add_menu do |menu|
@@ -176,15 +176,15 @@ Redmine::MenuManager.map :global_menu do |menu|
             partial: "work_packages/menus/menu"
 
   # News
-  menu.push :news,
-            { controller: "/news", project_id: nil, action: "index" },
-            caption: I18n.t("label_news_plural"),
-            icon: "megaphone",
-            after: :boards,
-            if: ->(_) {
-              (User.current.logged? || !Setting.login_required?) &&
-                User.current.allowed_in_any_project?(:view_news)
-            }
+  # menu.push :news,
+  #           { controller: "/news", project_id: nil, action: "index" },
+  #           caption: I18n.t("label_news_plural"),
+  #           icon: "megaphone",
+  #           after: :boards,
+  #           if: ->(_) {
+  #             (User.current.logged? || !Setting.login_required?) &&
+  #               User.current.allowed_in_any_project?(:view_news)
+  #           }
 end
 
 Redmine::MenuManager.map :notifications_menu do |menu|
@@ -558,11 +558,11 @@ Redmine::MenuManager.map :admin_menu do |menu|
             caption: :label_color_plural,
             icon: "meter"
 
-  menu.push :enterprise,
-            { controller: "/enterprises", action: :show },
-            caption: :label_enterprise_edition,
-            icon: "op-enterprise-addons",
-            if: proc { User.current.admin? && OpenProject::Configuration.ee_manager_visible? }
+  # menu.push :enterprise,
+  #           { controller: "/enterprises", action: :show },
+  #           caption: :label_enterprise_edition,
+  #           icon: "op-enterprise-addons",
+  #           if: proc { User.current.admin? && OpenProject::Configuration.ee_manager_visible? }
 
   menu.push :admin_backlogs,
             { controller: "/backlogs_settings", action: :show },

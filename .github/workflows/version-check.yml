@@ -39,7 +39,7 @@ jobs:
 
              - Work package URL: ${{ steps.version-check.outputs.wp_url }}
              - Work package version: ${{steps.version-check.outputs.wp_version}}
-             - Core version: ${{steps.version-check.outputs.core_version}}
+             - Core version: Stable/15.0.0
 
             Please make sure that:
 
