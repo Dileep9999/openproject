@@ -33,15 +33,15 @@ module Redmine::MenuManager::TopMenu::HelpMenu
                  I18n.locale,
                  OpenProject::Static::Links.help_link,
                  EnterpriseToken.active?]
-    OpenProject::Cache.fetch(cache_key) do
-      if OpenProject::Static::Links.help_link_overridden?
-        content_tag("li",
-                    render_single_menu_node(item, nil, "op-app-menu"),
-                    class: "op-app-menu--item op-app-help op-app-help_overridden")
-      else
-        render_help_dropdown
-      end
-    end
+    # OpenProject::Cache.fetch(cache_key) do
+    #   if OpenProject::Static::Links.help_link_overridden?
+    #     content_tag("li",
+    #                 render_single_menu_node(item, nil, "op-app-menu"),
+    #                 class: "op-app-menu--item op-app-help op-app-help_overridden")
+    #   else
+    #     render_help_dropdown
+    #   end
+    # end
   end
 
   def render_help_dropdown

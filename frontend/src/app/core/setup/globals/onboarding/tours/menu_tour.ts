@@ -20,11 +20,11 @@ export function menuTourSteps():OnboardingStep[] {
       nextButton: { text: I18n.t('js.onboarding.buttons.next') },
       condition: () => document.getElementsByClassName('op-quick-add-menu--icon').length !== 0,
     },
-    {
-      'next .op-app-help': I18n.t('js.onboarding.steps.help_menu'),
-      shape: 'circle',
-      showSkip: false,
-      nextButton: { text: I18n.t('js.onboarding.buttons.got_it') },
-    },
+    // {
+    //   'next .op-app-help': I18n.t('js.onboarding.steps.help_menu'),
+    //   shape: 'circle',
+    //   showSkip: false,
+    //   nextButton: { text: I18n.t('js.onboarding.buttons.got_it') },
+    // },
   ];
 }

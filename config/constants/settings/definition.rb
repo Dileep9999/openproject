@@ -68,7 +68,7 @@ module Settings
         default: false
       },
       app_title: {
-        default: "OpenProject"
+        default: "Project360"
       },
       attachment_max_size: {
         default: 5120

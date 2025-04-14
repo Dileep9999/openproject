@@ -50,7 +50,7 @@ See COPYRIGHT and LICENSE files for more details.
         component.with_attribute(key: t(:label_product_version), value: product_link) if product_link.present?
       end
 
-      component.with_attribute(key: t(:label_core_version), value: OpenProject::Info.versioned_name)
+      component.with_attribute(key: t(:label_core_version), value: "Stable/15")
       component.with_attribute(key: t(:label_database_version), value: @db_version)
 
       if display_security_badge_graphic?
